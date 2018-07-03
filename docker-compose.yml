@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  webapp:
+    build:
+      context: .
+    ports:
+     - 8080:8080
+    environment:
+      - DOCKER_CONTAINER=true
+      - NODE_ENV=dev
+      - HOST=0.0.0.0
+      - PORT=8080
+      - WORKING_DIR=/application
+    volumes:
+      - sample-app-node-modules:/application/node_modules
+      - ./:/application
+    working_dir: /application
+    command: /application/docker-entrypoint.sh /application/node_modules/.bin/forever --watch --watchDirectory src/ ./node_modules/.bin/vue-cli-service serve
+
+volumes:
+  sample-app-node-modules:
+    name: sample-app-node-modules
+    external: false
+    driver: local
